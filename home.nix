@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   ...
 }: {
@@ -14,6 +15,7 @@
 
     # basic git configuration, with gh credential helper enabled, uncomment to enable.
     ./modules/git.nix
+    ./modules/aws.nix
   ];
 
   nix.settings = {
@@ -22,6 +24,11 @@
     # follow xdg base dirs to keep home directory clean.
     use-xdg-base-directories = true;
   };
+
+    nixpkgs.config.allowUnfreePredicate = pkg:
+    builtins.elem (lib.getName pkg) [
+      "claude-code"
+    ];
 
   # Use latest version of nix
   nix.package = pkgs.nixVersions.latest;
@@ -42,27 +49,21 @@
   # The home.packages option allows you to install Nix packages into your
   # environment.
   home.packages = with pkgs; [
-    # # Add packages here to install them in your home environment.
-    # gnused  # There are some differences between BSD and GNU sed.
-    # gnumake
-    # ripgrep # A faster grep alternative. https://github.com/BurntSushi/ripgrep
-    # fd      # A faster find alternative. https://github.com/sharkdp/fd
-    # bat     # A cat clone with wings.    https://github.com/sharkdp/bat
-    # jq      # command-line JSON processor. https://jqlang.github.io/jq/tutorial/
-    # rsync   # Keep rsync up-to-date.
-
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
+    # Add packages here to install them in your home environment.
+    gnused # There are some differences between BSD and GNU sed.
+    gnumake
+    ripgrep # A faster grep alternative. https://github.com/BurntSushi/ripgrep
+    fd # A faster find alternative. https://github.com/sharkdp/fd
+    bat # A cat clone with wings.    https://github.com/sharkdp/bat
+    jq # command-line JSON processor. https://jqlang.github.io/jq/tutorial/
+    yq
+    rsync # Keep rsync up-to-date.
+    wireguard-tools
+    just
+    duckdb
+    alejandra
+    claude-code
+    nixfmt-rfc-style
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -100,4 +101,9 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+  };
 }
