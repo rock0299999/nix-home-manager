@@ -10,29 +10,32 @@
     };
   };
 
-  outputs = {
-    nixpkgs,
-    home-manager,
-    ...
-  }: let
-    # Supported systems for your flake packages, shell, etc.
-    systems = [
-      "aarch64-linux"
-      "x86_64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
-    # This is a function that generates an attribute by calling a function you pass to it, with each system as an argument
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-  in {
-    # Standalone home-manager configuration entrypoint
-    homeConfigurations."chenjiahao" = home-manager.lib.homeManagerConfiguration {
-      pkgs = nixpkgs.legacyPackages."aarch64-darwin";
-      modules = [./home.nix];
-    };
+  outputs =
+    {
+      nixpkgs,
+      home-manager,
+      ...
+    }:
+    let
+      # Supported systems for your flake packages, shell, etc.
+      systems = [
+        "aarch64-linux"
+        "x86_64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      # This is a function that generates an attribute by calling a function you pass to it, with each system as an argument
+      forAllSystems = nixpkgs.lib.genAttrs systems;
+    in
+    {
+      # Standalone home-manager configuration entrypoint
+      homeConfigurations."chenjiahao" = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages."aarch64-darwin";
+        modules = [ ./home.nix ];
+      };
 
-    # Set formatter so we can format nix files with `nix fmt`
-    # https://nix.dev/manual/nix/2.24/command-ref/new-cli/nix3-fmt
-    formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
-  };
+      # Set formatter so we can format nix files with `nix fmt`
+      # https://nix.dev/manual/nix/2.24/command-ref/new-cli/nix3-fmt
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.alejandra);
+    };
 }

@@ -10,7 +10,8 @@
   pkgs,
   lib,
   ...
-}: {
+}:
+{
   # config set will be merge into your home.nix.
   config = {
     # Install powerlevel10k

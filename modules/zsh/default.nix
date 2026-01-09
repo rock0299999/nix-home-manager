@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   imports = [
     # # Choose one of the following prompts.
     # # Uncomment following line to enable powerlevel10k prompt.
@@ -10,7 +11,7 @@
     # # Uncomment following line to enable starship prompt.
     ./starship
   ];
-  
+
   home.packages = with pkgs; [
     # some basic packages
     # https://github.com/zsh-users/zsh-completions
@@ -94,7 +95,7 @@
       enable = true;
       enableZshIntegration = true;
       enableBashIntegration = true;
-      options = ["--cmd cd"];
+      options = [ "--cmd cd" ];
     };
 
     fzf = {

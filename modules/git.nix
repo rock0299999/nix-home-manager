@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # Installs git and github cli
   home.packages = with pkgs; [
     git

@@ -2,7 +2,8 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # copy starship.toml to ~/.config/starship.toml
   home.file."${config.xdg.configHome}/starship.toml".source = ./starship.toml;
 
